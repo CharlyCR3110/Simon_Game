@@ -79,6 +79,21 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 				int n = 4;	// Número de sectores (wedges)
 				// Dibuja los sectores
 				for (int i = 0; i < n; i++) {
+					/**
+					 *
+					 *  Los colores se definen en el arreglo COLORS y se agregan al circulo de derecha a izquierda, es decir,
+					 *  en un circulo con 4 sectores, el primer color del arreglo se agrega al sector de la derecha,
+					 *  el segudno al sector de arriba, el tercero al sector de la izquierda y el cuarto al sector de abajo
+					 *
+					 * @param g - Graphics2D, el objeto que dibuja
+					 * @param cx - int, centro del panel en el eje X
+					 * @param cy - int, centro del panel en el eje Y
+					 * @param s - int, tamaño del circulo
+					 * @param start - int, inicio del sector
+					 * @param end - int, fin del sector
+					 * @ param c - Color, color del sector
+					 *
+					 * */
 					drawWedge(g, cx, cy, s, (i * 360 - 180) / n, 360 / n, COLORS[i]);	// Dibuja un sector
 					System.out.println("SECTOR COLOR" + COLORS[i]);
 				}
