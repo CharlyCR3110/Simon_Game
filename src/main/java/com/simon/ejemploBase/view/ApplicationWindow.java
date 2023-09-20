@@ -59,55 +59,59 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 		setupMenus();
 
 		JPanel mainPanel = createMainPanel();
-		c.add(BorderLayout.CENTER, mainPanel);
-		c.add(BorderLayout.PAGE_END, status = new StatusBar());
+		c.add(BorderLayout.CENTER, mainPanel);	// Agrega el panel
+		c.add(BorderLayout.PAGE_END, status = new StatusBar());	// Agrega la barra de estado
 	}
 
 	private JPanel createMainPanel() {
-		return new JPanel() {
+		JPanel panel =  new JPanel() {
 			@Override
 			public void paintComponent(Graphics bg) {
-				super.paintComponent(bg);
-				Graphics2D g = (Graphics2D) bg;
-				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-				int cx = getWidth() / 2;
-				int cy = getHeight() / 2;
-				g.setColor(Color.CYAN.darker());
-				g.drawLine(cx, 0, cx, getHeight());
-				g.drawLine(0, cy, getWidth(), cy);
-				int s = (int) (0.80 * Math.min(getWidth(), getHeight()));
-				int n = 6;	// Número de sectores (wedges)
+				super.paintComponent(bg);	// Limpia el fondo
+				Graphics2D g = (Graphics2D) bg;	// Conversión de tipo
+				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);	// Anti-aliasing
+				int cx = getWidth() / 2;	// Centro del panel (Eje X)
+				int cy = getHeight() / 2;	// Centro del panel (Eje Y)
+				g.setColor(Color.CYAN.darker());	// Color de fondo
+				g.drawLine(cx, 0, cx, getHeight());	// Línea vertical
+				g.drawLine(0, cy, getWidth(), cy);	// Línea horizontal
+				int s = (int) (0.80 * Math.min(getWidth(), getHeight()));	// Tamaño del círculo
+				int n = 4;	// Número de sectores (wedges)
+				// Dibuja los sectores
 				for (int i = 0; i < n; i++) {
-					drawWedge(g, cx, cy, s, (i * 360 - 180) / n, 360 / n, COLORS[i]);
+					drawWedge(g, cx, cy, s, (i * 360 - 180) / n, 360 / n, COLORS[i]);	// Dibuja un sector
+					System.out.println("SECTOR COLOR" + COLORS[i]);
 				}
-				g.setColor(Color.DARK_GRAY);
-				g.fillOval(cx - s / 6, cy - s / 6, s / 3, s / 3);
+				g.setColor(Color.DARK_GRAY);	// Color del circulo central
+				g.fillOval(cx - s / 6, cy - s / 6, s / 3, s / 3);	// Dibuja el círculo central
 			}
 		};
+		
+		return panel;
 	}
 
 	private void drawWedge(Graphics2D g, int cx, int cy, int s, int start, int end, Color c) {
-		double r = Math.PI / 180.0;
-		int x0 = (int) (cx + s * 0.5 * Math.cos(-start * r));
-		int y0 = (int) (cy + s * 0.5 * Math.sin(-start * r));
-		int x1 = (int) (cx + s * 0.5 * Math.cos(-(start + end) * r));
-		int y1 = (int) (cy + s * 0.5 * Math.sin(-(start + end) * r));
-		g.setColor(c);
-		g.fillArc(cx - s / 2, cy - s / 2, s, s, start, end);
-		g.setColor(Color.DARK_GRAY);
-		g.setStroke(new BasicStroke(16f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL));
-		g.drawLine(cx, cy, x0, y0);
-		g.drawLine(cx, cy, x1, y1);
-		g.drawArc(cx - s / 2, cy - s / 2, s, s, start, end);
+		double r = Math.PI / 180.0;	// Conversión de grados a radianes
+		int x0 = (int) (cx + s * 0.5 * Math.cos(-start * r));	// Puntos de inicio y fin del sector
+		int y0 = (int) (cy + s * 0.5 * Math.sin(-start * r));	// Puntos de inicio y fin del sector
+		int x1 = (int) (cx + s * 0.5 * Math.cos(-(start + end) * r));	// Puntos de inicio y fin del sector
+		int y1 = (int) (cy + s * 0.5 * Math.sin(-(start + end) * r));	// Puntos de inicio y fin del sector
+		g.setColor(c);	// Color del sector
+		g.fillArc(cx - s / 2, cy - s / 2, s, s, start, end);	// Dibuja el sector
+		g.setColor(Color.DARK_GRAY);	// Color de las líneas
+		g.setStroke(new BasicStroke(16f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL));	// Grosor de las líneas
+		g.drawLine(cx, cy, x0, y0);	// Dibuja las líneas
+		g.drawLine(cx, cy, x1, y1);	// Dibuja las líneas
+		g.drawArc(cx - s / 2, cy - s / 2, s, s, start, end);	// Dibuja el sector
 	}
 
 	private static final Color[] COLORS = {
-			Color.RED,
-			Color.GREEN,
-			Color.YELLOW,
-			new Color(72, 72, 255),
-			new Color(0, 255, 255),
-			new Color(255, 0, 255)
+			new Color(255, 0, 0),	// Rojo
+			new Color(0, 255, 0),	// Verde
+			new Color(0, 0, 255),	// Azul
+			new Color(255, 255, 0),	// Amarillo
+			new Color(0, 255, 255),	// Cyan
+			new Color(255, 0, 255)	// Magenta?
 	};
 
 	private void setupMenus() {
