@@ -13,6 +13,7 @@ import java.beans.PropertyChangeListener;
 public class ApplicationWindow extends JFrame implements PropertyChangeListener {
 
 	private Controller mainControl;
+	private int numSectors = 6;	// puede ser 4, 5 o 6
 	private static final int MAX_MSG_TIME = 5_000;
 	private JMenuBar mainMenu;
 	private JMenu fileMenu;
@@ -59,51 +60,73 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 		setupMenus();
 
 		JPanel mainPanel = createMainPanel();
+		mainPanel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				try {
+					Robot robot = new Robot();
+					Color color = robot.getPixelColor(e.getXOnScreen(), e.getYOnScreen());
+					System.out.println("Color: " + color);
+				} catch (AWTException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+
 		c.add(BorderLayout.CENTER, mainPanel);	// Agrega el panel
 		c.add(BorderLayout.PAGE_END, status = new StatusBar());	// Agrega la barra de estado
 	}
 
 	private JPanel createMainPanel() {
-		JPanel panel =  new JPanel() {
+		JPanel panel = new JPanel() {
 			@Override
 			public void paintComponent(Graphics bg) {
-				super.paintComponent(bg);	// Limpia el fondo
-				Graphics2D g = (Graphics2D) bg;	// Conversión de tipo
-				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);	// Anti-aliasing
-				int cx = getWidth() / 2;	// Centro del panel (Eje X)
-				int cy = getHeight() / 2;	// Centro del panel (Eje Y)
-				g.setColor(Color.CYAN.darker());	// Color de fondo
-				g.drawLine(cx, 0, cx, getHeight());	// Línea vertical
-				g.drawLine(0, cy, getWidth(), cy);	// Línea horizontal
-				int s = (int) (0.80 * Math.min(getWidth(), getHeight()));	// Tamaño del círculo
-				int n = 4;	// Número de sectores (wedges)
-				// Dibuja los sectores
+				super.paintComponent(bg);
+				Graphics2D g = (Graphics2D) bg;
+				setupGraphics(g);
+				drawGrid(g);
+				drawSectors(g);
+				drawCentralCircle(g);
+			}
+
+			private void setupGraphics(Graphics2D g) {
+				g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			}
+
+			private void drawGrid(Graphics2D g) {
+				int cx = getWidth() / 2;
+				int cy = getHeight() / 2;
+				g.setColor(Color.CYAN.darker());
+				g.drawLine(cx, 0, cx, getHeight());
+				g.drawLine(0, cy, getWidth(), cy);
+			}
+
+			private void drawSectors(Graphics2D g) {
+				int cx = getWidth() / 2;
+				int cy = getHeight() / 2;
+				int s = (int) (0.80 * Math.min(getWidth(), getHeight()));
+				int n = numSectors;
+
 				for (int i = 0; i < n; i++) {
-					/**
-					 *
-					 *  Los colores se definen en el arreglo COLORS y se agregan al circulo de derecha a izquierda, es decir,
-					 *  en un circulo con 4 sectores, el primer color del arreglo se agrega al sector de la derecha,
-					 *  el segudno al sector de arriba, el tercero al sector de la izquierda y el cuarto al sector de abajo
-					 *
-					 * @param g - Graphics2D, el objeto que dibuja
-					 * @param cx - int, centro del panel en el eje X
-					 * @param cy - int, centro del panel en el eje Y
-					 * @param s - int, tamaño del circulo
-					 * @param start - int, inicio del sector
-					 * @param end - int, fin del sector
-					 * @ param c - Color, color del sector
-					 *
-					 * */
-					drawWedge(g, cx, cy, s, (i * 360 - 180) / n, 360 / n, COLORS[i]);	// Dibuja un sector
-					System.out.println("SECTOR COLOR" + COLORS[i]);
+					int startAngle = (i * 360) / n;
+					int sweepAngle = (360 / n);
+					drawWedge(g, cx, cy, s, startAngle, sweepAngle, COLORS[i]);
 				}
-				g.setColor(Color.DARK_GRAY);	// Color del circulo central
-				g.fillOval(cx - s / 6, cy - s / 6, s / 3, s / 3);	// Dibuja el círculo central
+			}
+
+			private void drawCentralCircle(Graphics2D g) {
+				int cx = getWidth() / 2;
+				int cy = getHeight() / 2;
+				int s = (int) (0.80 * Math.min(getWidth(), getHeight()));
+				int centralCircleRadius = s / 6;
+				g.setColor(Color.DARK_GRAY);
+				g.fillOval(cx - centralCircleRadius, cy - centralCircleRadius, centralCircleRadius * 2, centralCircleRadius * 2);
 			}
 		};
-		
+
 		return panel;
 	}
+
 
 	private void drawWedge(Graphics2D g, int cx, int cy, int s, int start, int end, Color c) {
 		double r = Math.PI / 180.0;	// Conversión de grados a radianes
