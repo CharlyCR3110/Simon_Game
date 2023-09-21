@@ -14,6 +14,8 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 
 	private Controller mainControl;
 	private int numSectors = 6;	// puede ser 4, 5 o 6
+	private int highlightedColorIndex = 0; // Inicialmente, no hay color resaltado
+
 	private static final int MAX_MSG_TIME = 5_000;
 	private JMenuBar mainMenu;
 	private JMenu fileMenu;
@@ -87,6 +89,7 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 				drawGrid(g);
 				drawSectors(g);
 				drawCentralCircle(g);
+				drawHighlightedColor(g);
 			}
 
 			private void setupGraphics(Graphics2D g) {
@@ -121,6 +124,28 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 				int centralCircleRadius = s / 6;
 				g.setColor(Color.DARK_GRAY);
 				g.fillOval(cx - centralCircleRadius, cy - centralCircleRadius, centralCircleRadius * 2, centralCircleRadius * 2);
+			}
+
+			private void drawHighlightedColor(Graphics2D g) {
+				if (highlightedColorIndex >= 0 && highlightedColorIndex < COLORS.length) {
+					int cx = getWidth() / 2;
+					int cy = getHeight() / 2;
+					int s = (int) (0.80 * Math.min(getWidth(), getHeight()));
+					int n = numSectors;
+
+					int startAngle = (highlightedColorIndex * 360) / n;
+					int sweepAngle = (360 / n);
+					Color highlightedColor = COLORS[highlightedColorIndex];
+
+					// Dibuja el color resaltado con un borde especial
+					g.setColor(highlightedColor.darker()); // Cambia el color del borde
+					g.setStroke(new BasicStroke(6f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL)); // Grosor del borde
+					g.drawArc(cx - s / 2, cy - s / 2, s, s, startAngle, sweepAngle);
+
+					// Dibuja el color resaltado con un fondo especial
+					g.setColor(new Color(255, 255, 255, 128)); // Color de fondo semitransparente
+					g.fillArc(cx - s / 2, cy - s / 2, s, s, startAngle, sweepAngle);
+				}
 			}
 		};
 
