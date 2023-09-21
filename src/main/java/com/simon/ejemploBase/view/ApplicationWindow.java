@@ -4,11 +4,15 @@ import com.simon.ejemploBase.configuration.Configuration;
 import com.simon.ejemploBase.control.Controller;
 import com.simon.ejemploBase.model.ModelView;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.File;
 import java.util.Queue;
 
 public class ApplicationWindow extends JFrame implements PropertyChangeListener {
@@ -191,6 +195,35 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 		return index;
 	}
 
+	private void playSound(String soundFileName) {
+		try {
+			// Obtener el archivo de sonido desde una ruta absoluta
+			File soundFile = new File(soundFileName);
+
+			if (!soundFile.exists()) {
+				throw new IllegalArgumentException("Archivo de sonido no encontrado: " + soundFileName);
+			}
+
+			// Cargar el archivo de sonido
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile);
+
+			// Obtener el clip de audio
+			Clip clip = AudioSystem.getClip();
+
+			// Abre el clip con el audio cargado
+			clip.open(audioInputStream);
+
+			// Reproduce el sonido
+			clip.start();
+		} catch (Exception e) {
+			System.err.println("Error al reproducir el sonido: " + soundFileName);
+			e.printStackTrace();
+		}
+	}
+
+
+
+
 	// El model le pasa la secuencia al controller y el controller se la pasa a este método
 	public void highlighSequence(Queue<Integer> sequence) {
 		SwingWorker<Void, Integer> worker = new SwingWorker<Void, Integer>() {
@@ -199,6 +232,7 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 				int pauseTime = 500; // 1 segundo
 				for (Integer colorIndex : sequence) {
 					publish(colorIndex); // Publica el color actual para actualizar la interfaz de usuario
+					playSound("src/main/resources/sounds/" + colorIndex +".wav"); // Reproduce el sonido
 					Thread.sleep(pauseTime); // Agrega una pausa de 1 segundo entre colores
 				}
 				return null;
