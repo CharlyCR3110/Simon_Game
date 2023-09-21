@@ -5,18 +5,7 @@ import com.simon.ejemploBase.model.Model;
 import com.simon.ejemploBase.model.ModelView;
 import java.beans.PropertyChangeListener;
 
-/**
- * -------------------------------------------------------------------
- *
- * (c) 2021-2022
- *
- * @author Georges Alfaro S.
- * @version 2.1.0 2021-09-13
- *
- * --------------------------------------------------------------------
- */
 public class Controller {
-	//<editor-fold desc="constructors">
 
 	public Controller(Configuration configuration, Model data) {
 		System.out.println("Iniciando gestor de la aplicación..");
@@ -37,8 +26,6 @@ public class Controller {
 	public void init() {
 	}
 
-	//</editor-fold>
-	//<editor-fold desc="MVC">
 	public void register(PropertyChangeListener newObserver) {
 		// Asocia el modelo a la clase de control, para poder
 		// ejecutar los métodos correspondientes.
@@ -52,16 +39,12 @@ public class Controller {
 		getData().removePropertyChangeListener(current);
 	}
 
-	//</editor-fold>
-	//<editor-fold desc="methods (functionality)">
 	public ModelView getModel() {
 		// El método regresa una referencia al modelo pero con
 		// el tipo de la clase ModelView (ModelView) para limitar
 		// los métodos a los que tendrá acceso la vista.
 		return getData();
 	}
-	//</editor-fold>
-	//<editor-fold desc="métodos (control de la interfaz)">
 
 	public void closeApplication() {
 		if (getConfiguration().isUpdated()) {
@@ -77,8 +60,6 @@ public class Controller {
 		//
 		System.exit(0);
 	}
-	//</editor-fold>
-	//<editor-fold desc="attributes">
 
 	public Configuration getConfiguration() {
 		return configuration;
@@ -90,6 +71,5 @@ public class Controller {
 
 	private Configuration configuration;
 	private Model data;
-	//</editor-fold>
 }
 
