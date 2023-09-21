@@ -9,12 +9,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.Queue;
 
 public class ApplicationWindow extends JFrame implements PropertyChangeListener {
 
 	private Controller mainControl;
 	private int numSectors = 6;	// puede ser 4, 5 o 6
-	private int highlightedColorIndex = 0; // Inicialmente, no hay color resaltado
+	private int highlightedColorIndex = -1; // Inicialmente, no hay color resaltado
 
 	private static final int MAX_MSG_TIME = 5_000;
 	private JMenuBar mainMenu;
@@ -77,7 +78,6 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 				}
 			}
 		});
-
 		c.add(BorderLayout.CENTER, mainPanel);	// Agrega el panel
 		c.add(BorderLayout.PAGE_END, status = new StatusBar());	// Agrega la barra de estado
 	}
@@ -190,6 +190,40 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 		}
 		return index;
 	}
+
+	// El model le pasa la secuencia al controller y el controller se la pasa a este método
+	public void highlighSequence(Queue<Integer> sequence) {
+		SwingWorker<Void, Integer> worker = new SwingWorker<Void, Integer>() {
+			@Override
+			protected Void doInBackground() throws Exception {
+				int pauseTime = 500; // 1 segundo
+				for (Integer colorIndex : sequence) {
+					publish(colorIndex); // Publica el color actual para actualizar la interfaz de usuario
+					Thread.sleep(pauseTime); // Agrega una pausa de 1 segundo entre colores
+				}
+				return null;
+			}
+
+			@Override
+			protected void process(java.util.List<Integer> chunks) {
+				// Este método se ejecuta en el hilo de la interfaz de usuario
+				for (Integer colorIndex : chunks) {
+					highlightedColorIndex = colorIndex;
+					repaint();
+				}
+			}
+
+			@Override
+			protected void done() {
+				// La secuencia ha terminado
+				highlightedColorIndex = -1;
+				repaint();
+			}
+		};
+
+		worker.execute();
+	}
+
 
 	private void setupMenus() {
 		mainMenu = new JMenuBar();
