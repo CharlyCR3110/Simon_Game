@@ -220,10 +220,7 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 			e.printStackTrace();
 		}
 	}
-
-
-
-
+	
 	// El model le pasa la secuencia al controller y el controller se la pasa a este método
 	public void highlighSequence(Queue<Integer> sequence) {
 		SwingWorker<Void, Integer> worker = new SwingWorker<Void, Integer>() {
@@ -257,7 +254,6 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 
 		worker.execute();
 	}
-
 
 	private void setupMenus() {
 		mainMenu = new JMenuBar();
@@ -294,6 +290,13 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 		}
 	}
 
+	public void setNumSectors(int numSectors) {
+		this.numSectors = numSectors;
+	}
+
+	public int getNumSectors() {
+		return numSectors;
+	}
 	@Override
 	public String toString() {
 		return String.format("VentanaAplicacion('%s')", getTitle());
