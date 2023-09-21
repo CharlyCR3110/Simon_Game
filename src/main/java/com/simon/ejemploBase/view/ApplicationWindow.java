@@ -69,6 +69,9 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 					Robot robot = new Robot();
 					Color color = robot.getPixelColor(e.getXOnScreen(), e.getYOnScreen());
 					System.out.println("Color: " + color);
+					System.out.println("Índice: " + getSelectedColorIndex(color));
+//					highlightedColorIndex = getSelectedColorIndex(color);
+//					mainPanel.repaint();
 				} catch (AWTException ex) {
 					ex.printStackTrace();
 				}
@@ -176,6 +179,17 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 			new Color(0, 255, 255),	// Cyan
 			new Color(255, 0, 255)	// Magenta?
 	};
+
+	public int getSelectedColorIndex (Color clickedColor) {
+		int index = -1;
+		for (int i = 0; i < COLORS.length; i++) {
+			if (COLORS[i].equals(clickedColor)) {
+				index = i;
+				break;
+			}
+		}
+		return index;
+	}
 
 	private void setupMenus() {
 		mainMenu = new JMenuBar();
