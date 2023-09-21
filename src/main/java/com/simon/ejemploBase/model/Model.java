@@ -2,25 +2,13 @@ package com.simon.ejemploBase.model;
 
 import com.simon.mvc.ObservableModel;
 
-/**
- * -------------------------------------------------------------------
- *
- * (c) 2021-2022
- *
- * @author Georges Alfaro S.
- * @version 2.1.0 2021-09-13
- *
- * --------------------------------------------------------------------
- */
+
 public class Model extends ObservableModel implements ModelView {
-	//<editor-fold desc="constructors">
 
 	public Model() {
 		System.out.println("Inicializando modelo..");
 	}
 
-	//</editor-fold>
-	//<editor-fold desc="methods">
 	private void updateData(String msg) {
 		// El uso de un PropertyChangeListener permite enviar
 		// eventos desde el modelo asociados a atributos o
@@ -34,8 +22,4 @@ public class Model extends ObservableModel implements ModelView {
 		notifyListeners(String.format("%s", msg), this);
 	}
 
-	//</editor-fold>
-	//<editor-fold desc="attributes">
-	// Componentes del modelo.
-	//</editor-fold>
 }
