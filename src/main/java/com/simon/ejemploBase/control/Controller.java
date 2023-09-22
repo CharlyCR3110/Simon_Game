@@ -7,6 +7,7 @@ import com.simon.ejemploBase.view.ApplicationWindow;
 
 import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 public class Controller {
@@ -90,10 +91,17 @@ public class Controller {
 		System.out.println("Color incorrecto.");
 		// Establecer el estado del juego como terminado
 		data.setGameOver(true);
+		// Guardar el nuevo puntaje
+		data.saveScore();
 		// Reproducir el sonido de error
 		view.playSound("src/main/resources/sounds/error_sound.wav");
 		// Mostrar el mensaje de que ha terminado el juego
 		view.showMessage("Ha terminado el juego. Su puntaje es: " + data.getCurrentRound());
+
+	}
+
+	public List<Integer> getScores() {
+		return data.getScores();
 	}
 
 
