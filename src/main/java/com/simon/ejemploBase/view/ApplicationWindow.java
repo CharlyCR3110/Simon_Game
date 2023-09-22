@@ -267,6 +267,9 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 		// Agregar el elemento "Reiniciar" al menú "Juego"
 		gameMenu.add(new JMenuItem("Reiniciar"));
 
+		// Agregar el elemento "Puntajes" al menú "Juego"
+		gameMenu.add(new JMenuItem("Puntajes"));
+
 		// Agregar el elemento "Salir" al menú "Archivo"
 		fileMenu.add(quitItem = new JMenuItem("Salir"));
 
@@ -277,6 +280,13 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 		// Agregar un ActionListener para el elemento "Reiniciar"
 		gameMenu.getItem(0).addActionListener(e -> restartGame());
 
+		// Agregar un ActionListener para el elemento "Puntajes"
+		gameMenu.getItem(1).addActionListener(e -> showScores());
+	}
+
+	private void showScores() {
+		// crea la ventana de puntajes ScoresView
+		ScoresView scoresView = new ScoresView(mainControl.getScores());
 	}
 
 	// Método para reiniciar el juego
