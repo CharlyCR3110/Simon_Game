@@ -75,6 +75,7 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 					Color color = robot.getPixelColor(e.getXOnScreen(), e.getYOnScreen());
 					System.out.println("Color: " + color);
 					System.out.println("Índice: " + getSelectedColorIndex(color));
+					mainControl.handleColorSelection(getSelectedColorIndex(color));
 //					highlightedColorIndex = getSelectedColorIndex(color);
 //					mainPanel.repaint();
 				} catch (AWTException ex) {
@@ -195,7 +196,7 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 		return index;
 	}
 
-	private void playSound(String soundFileName) {
+	public void playSound(String soundFileName) {
 		try {
 			// Obtener el archivo de sonido desde una ruta absoluta
 			File soundFile = new File(soundFileName);
@@ -273,6 +274,7 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 		System.out.println();
 		status.setTimed(true);
 		status.setMaxTime(MAX_MSG_TIME);
+		mainControl.startGame();
 	}
 
 	public boolean confirmClose() {
@@ -335,5 +337,8 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 		cfg.setProperty("window_x", String.valueOf(getLocation().x));
 		cfg.setProperty("window_y", String.valueOf(getLocation().y));
 		cfg.setUpdated(true);
+	}
+	public void showMessage(String message) {
+		JOptionPane.showMessageDialog(this, message);
 	}
 }
