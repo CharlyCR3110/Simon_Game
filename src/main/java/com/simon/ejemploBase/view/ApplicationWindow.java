@@ -259,11 +259,33 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 	private void setupMenus() {
 		mainMenu = new JMenuBar();
 		mainMenu.add(fileMenu = new JMenu("Archivo"));
+
+		// JMenu para reiniciar el juego
+		JMenu gameMenu = new JMenu("Juego");
+		mainMenu.add(gameMenu);
+
+		// Agregar el elemento "Reiniciar" al menú "Juego"
+		gameMenu.add(new JMenuItem("Reiniciar"));
+
+		// Agregar el elemento "Salir" al menú "Archivo"
 		fileMenu.add(quitItem = new JMenuItem("Salir"));
+
 		setJMenuBar(mainMenu);
 
 		quitItem.addActionListener(e -> closeWindow());
+
+		// Agregar un ActionListener para el elemento "Reiniciar"
+		gameMenu.getItem(0).addActionListener(e -> restartGame());
+
 	}
+
+	// Método para reiniciar el juego
+	private void restartGame() {
+//		mainControl.restartGame(); // Llama al controlador para reiniciar el juego
+		System.out.println("Reiniciando el juego..");
+		mainControl.startGame();
+	}
+
 
 	public void init() {
 		mainControl.register(this);
