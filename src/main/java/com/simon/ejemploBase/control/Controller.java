@@ -105,7 +105,15 @@ public class Controller {
 			return;
 		}
 		this.sequence = sequenceCopy;
-		view.highlighSequence(sequence);
+		int timeBetweenColors = 1000;
+		// el tiempo entre colores es de 1 segundo y se va reduciendo en 200 milisegundos por cada 3 rondas
+		if (data.getCurrentRound() > 3) {
+			timeBetweenColors = 1000 - (data.getCurrentRound() / 3) * 200;
+		} else {
+			timeBetweenColors = 1000;
+		}
+
+		view.highlighSequence(sequence, timeBetweenColors);
 	}
 
 	public void register(PropertyChangeListener newObserver) {

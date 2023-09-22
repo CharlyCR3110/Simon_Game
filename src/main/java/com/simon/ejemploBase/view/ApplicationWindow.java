@@ -223,11 +223,11 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 	}
 	
 	// El model le pasa la secuencia al controller y el controller se la pasa a este método
-	public void highlighSequence(Queue<Integer> sequence) {
+	public void highlighSequence(Queue<Integer> sequence, int timeBetweenColors) {
 		SwingWorker<Void, Integer> worker = new SwingWorker<Void, Integer>() {
 			@Override
 			protected Void doInBackground() throws Exception {
-				int pauseTime = 500; // 1 segundo
+				int pauseTime = timeBetweenColors; // Tiempo de pausa entre colores
 				for (Integer colorIndex : sequence) {
 					publish(colorIndex); // Publica el color actual para actualizar la interfaz de usuario
 					playSound("src/main/resources/sounds/" + colorIndex +".wav"); // Reproduce el sonido
