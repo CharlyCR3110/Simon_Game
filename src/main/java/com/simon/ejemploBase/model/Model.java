@@ -3,6 +3,7 @@ package com.simon.ejemploBase.model;
 import com.simon.mvc.ObservableModel;
 
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Random;
 
@@ -11,6 +12,7 @@ public class Model extends ObservableModel implements ModelView {
 	private int currentRound; // Número de ronda actual
 	private int maxColors; // Número máximo de colores
 	private boolean gameOver; // Indica si el juego ha terminado
+	private List<Integer> scores; // Lista de puntajes
 
 	public Model() {
 		System.out.println("Inicializando modelo..");
@@ -82,5 +84,16 @@ public class Model extends ObservableModel implements ModelView {
 		currentRound++;
 		generateNextColor();
 		updateData("nextRound");
+	}
+
+	public void saveScore() {
+		if (scores == null) {
+			scores = new LinkedList<>();
+		}
+		scores.add(currentRound);
+	}
+
+	public List<Integer> getScores() {
+		return scores;
 	}
 }
