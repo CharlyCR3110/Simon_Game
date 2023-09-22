@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Queue;
 
 /**
  *
@@ -73,7 +74,9 @@ public class EjemploBase {
         Controller control = new Controller(configuration);
         control.init();
 
-        new ApplicationWindow(getClass().getSimpleName(), control).init();
+        ApplicationWindow app = new ApplicationWindow(getClass().getSimpleName(), control);
+
+        control.addView(app);
     }
 
     private final Configuration configuration;
