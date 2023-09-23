@@ -11,13 +11,10 @@ import java.util.List;
 import java.util.Queue;
 
 public class Controller {
-	private Queue<Integer> sequence;	// Secuencia de colores
-
-	public Controller(Configuration configuration, Model data) {
-		System.out.println("Iniciando gestor de la aplicación..");
-		this.configuration = configuration;
-		this.data = data;
-	}
+	private Queue<Integer> sequence;    // Secuencia de colores
+	private Configuration configuration;
+	private Model data;
+	private ApplicationWindow view;
 
 	public Controller(Configuration configuration) {
 
@@ -29,12 +26,19 @@ public class Controller {
 		this(configuration, new Model(6));
 	}
 
+	public Controller(Configuration configuration, Model data) {
+		this.configuration = configuration;
+		this.data = data;
+		this.view = view;
+		System.out.println("Iniciando gestor de la aplicación..");
+	}
 	public Controller(Configuration configuration, ApplicationWindow view, Model model) {
 		this(configuration, model);
 		this.view = view;
 	}
-	public void init() {
 
+	public void init() {
+		// Inicialización de la aplicación
 	}
 
 	public void startGame() {
@@ -43,22 +47,27 @@ public class Controller {
 		playNextColorInSequence();
 	}
 
-	// Manejar la selección de un color por el jugador
 	public void handleColorSelection(int selectedColor) {
-		// Verificar si el juego ha terminado
+		/**
+		 * Se comprueba que el color seleccionado esté dentro del rango de colores ya que
+		 * si se hace click en cualquier otra parte de la ventana, se envía un -1 como
+		 * color seleccionado. Y esto no contaria como error.
+		 **/
+		if (selectedColor < 0 || selectedColor > data.getNumOfColors()) {
+			System.out.println("Color inválido.");
+			return;
+		}
+
 		if (data.isGameOver()) {
 			System.out.println("Juego terminado.");
 			return;
 		}
 
-		// Mostrar el color seleccionado y la secuencia actual
 		System.out.printf("Color seleccionado: %d%n", selectedColor);
 		System.out.println("Secuencia actual: " + sequence);
 
-		// Obtener el siguiente color en la secuencia
-		int nextColor = sequence.poll(); // Usamos poll() para obtener y eliminar el primer elemento
+		int nextColor = sequence.poll();
 
-		// Reproducir el sonido correspondiente al color seleccionado
 		if (selectedColor != nextColor) {
 			System.out.println("Color incorrecto.");
 			gameIsOver();
@@ -67,68 +76,51 @@ public class Controller {
 
 		String soundFilePath = String.format("src/main/resources/sounds/%d.wav", selectedColor);
 		view.playSound(soundFilePath);
+		view.highlightSpecificColor(selectedColor);
 
-		// Comprobar si la secuencia todavía tiene elementos
 		if (sequence.isEmpty()) {
-			// El jugador ha completado la ronda
 			System.out.println("Ronda completada.");
-			// Esperar un segundo antes de pasar a la siguiente ronda
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				Thread.currentThread().interrupt();
 			}
-			playNextColorInSequence(); // Llama a la función para continuar con la siguiente secuencia
+			playNextColorInSequence();
 		} else {
-			// El color seleccionado es correcto
 			System.out.println("Color correcto.");
 		}
 	}
 
-
 	private void gameIsOver() {
-		// DEBUG
 		System.out.println("Juego terminado.");
 		System.out.println("Color incorrecto.");
-		// Establecer el estado del juego como terminado
 		data.setGameOver(true);
-		// Guardar el nuevo puntaje
 		data.saveScore();
-		// Reproducir el sonido de error
 		view.playSound("src/main/resources/sounds/error_sound.wav");
-		// Mostrar el mensaje de que ha terminado el juego
 		view.showMessage("Ha terminado el juego. Su puntaje es: " + data.getCurrentRound());
-
 	}
 
 	public List<Integer> getScores() {
 		return data.getScores();
 	}
 
-
-	// Reproducir el siguiente color en la secuencia
 	private void playNextColorInSequence() {
-		Queue<Integer> sequenceCopy = new LinkedList<>(data.getNextSequence()); // Crea una nueva instancia y copia la secuencia
+		Queue<Integer> sequenceCopy = new LinkedList<>(data.getNextSequence());
 		if (sequenceCopy == null || sequenceCopy.isEmpty()) {
 			System.out.println("La secuencia está vacía..");
 			return;
 		}
 		this.sequence = sequenceCopy;
 		int timeBetweenColors = 1000;
-		// el tiempo entre colores es de 1 segundo y se va reduciendo en 200 milisegundos por cada 3 rondas
 		if (data.getCurrentRound() > 3) {
 			timeBetweenColors = 1000 - (data.getCurrentRound() / 3) * 200;
 		} else {
 			timeBetweenColors = 1000;
 		}
-
 		view.highlighSequence(sequence, timeBetweenColors);
 	}
 
 	public void register(PropertyChangeListener newObserver) {
-		// Asocia el modelo a la clase de control, para poder
-		// ejecutar los métodos correspondientes.
-		//
 		System.out.printf("Registrando: %s..%n", newObserver);
 		getData().addPropertyChangeListener(newObserver);
 	}
@@ -139,9 +131,6 @@ public class Controller {
 	}
 
 	public ModelView getModel() {
-		// El método regresa una referencia al modelo pero con
-		// el tipo de la clase ModelView (ModelView) para limitar
-		// los métodos a los que tendrá acceso la vista.
 		return getData();
 	}
 
@@ -151,12 +140,6 @@ public class Controller {
 		}
 
 		System.out.println("Aplicación finalizada normalmente..");
-
-		// Al cerrar la aplicación, todas las ventanas que son atendidas
-		// por el EDT (Event dispatching thread) principal, son cerradas
-		// también. No es necesario tener una referencia para cerrarlas
-		// de manera explícita.
-		//
 		System.exit(0);
 	}
 
@@ -168,10 +151,6 @@ public class Controller {
 		return data;
 	}
 
-	private Configuration configuration;
-	private Model data;
-	private ApplicationWindow view;
-
 	public void addView(ApplicationWindow app) {
 		this.view = app;
 		if (app != null) {
@@ -179,4 +158,3 @@ public class Controller {
 		}
 	}
 }
-
