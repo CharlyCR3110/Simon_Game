@@ -19,7 +19,7 @@ import java.util.Queue;
 public class ApplicationWindow extends JFrame implements PropertyChangeListener {
 
 	private Controller mainControl;
-	private int numSectors = 6;	// puede ser 4, 5 o 6
+	private int numSectors;	// puede ser 4, 5 o 6
 	private int highlightedColorIndex = -1; // Inicialmente, no hay color resaltado
 
 	private static final int MAX_MSG_TIME = 5_000;
@@ -41,6 +41,8 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 		setSize(640, 480);
 		setMinimumSize(new Dimension(480, 360));
 		setLocationRelativeTo(null);
+
+		setNumSectors(mainControl.getGameConfig().getColorsToShow());
 
 		addComponentListener(new ComponentAdapter() {
 			@Override
