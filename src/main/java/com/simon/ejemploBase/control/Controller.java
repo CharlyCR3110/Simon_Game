@@ -1,6 +1,7 @@
 package com.simon.ejemploBase.control;
 
 import com.simon.ejemploBase.configuration.Configuration;
+import com.simon.ejemploBase.configuration.GameConfig;
 import com.simon.ejemploBase.model.Model;
 import com.simon.ejemploBase.model.ModelView;
 import com.simon.ejemploBase.view.ApplicationWindow;
@@ -18,22 +19,28 @@ public class Controller {
 	private Configuration configuration;
 	private Model data;
 	private ApplicationWindow view;
+	private GameConfig gameConfig;
 
-	public Controller(Configuration configuration) {
-		this(configuration, new Model(6));
-	}
-
-	public Controller(Configuration configuration, Model data) {
+	public Controller(Configuration configuration, GameConfig gameConfig) {
 		this.configuration = configuration;
-		this.data = data;
-		this.view = view;
+		this.data = new Model(gameConfig.getColorsToShow());
+		this.gameConfig = gameConfig;
 		System.out.println("Iniciando gestor de la aplicación..");
 	}
-	public Controller(Configuration configuration, ApplicationWindow view, Model model) {
-		this(configuration, model);
-		this.view = view;
-	}
-
+//	public Controller(Configuration configuration) {
+//		this(configuration, new Model(6));
+//	}
+//
+//	public Controller(Configuration configuration, Model data) {
+//		this.configuration = configuration;
+//		this.data = data;
+//		this.view = view;
+//		System.out.println("Iniciando gestor de la aplicación..");
+//	}
+//	public Controller(Configuration configuration, ApplicationWindow view, Model model) {
+//		this(configuration, model);
+//		this.view = view;
+//	}
 	public void init() {
 		// Inicialización de la aplicación
 	}
@@ -152,6 +159,9 @@ public class Controller {
 
 	public Model getData() {
 		return data;
+	}
+	public GameConfig getGameConfig() {
+		return gameConfig;
 	}
 
 	public void addView(ApplicationWindow app) {
