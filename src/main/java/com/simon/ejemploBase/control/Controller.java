@@ -118,13 +118,15 @@ public class Controller {
 			return;
 		}
 		this.sequence = sequenceCopy;
-		int timeBetweenColors = 1000;
-		if (data.getCurrentRound() > 3) {
-			timeBetweenColors = 1000 - (data.getCurrentRound() / 3) * 200;
-		} else {
-			timeBetweenColors = 1000;
-		}
-		view.highlighSequence(sequence, timeBetweenColors);
+
+		// Calcular el tiempo entre colores
+		int currentRound = data.getCurrentRound();
+		int initialTimeBetweenColors = 1000;
+		int reductionPerRound = 200;
+		int timeBetweenColors = initialTimeBetweenColors - ((currentRound - 1) / 3) * reductionPerRound;
+		timeBetweenColors = Math.max(timeBetweenColors, reductionPerRound); // Asegurar que no sea menor que reductionPerRound
+		System.out.printf("Tiempo entre colores: %d%n", timeBetweenColors);
+		view.highlighSequence(sequenceCopy, timeBetweenColors);
 	}
 
 	public void register(PropertyChangeListener newObserver) {
