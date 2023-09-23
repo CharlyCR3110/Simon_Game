@@ -17,11 +17,12 @@ public class GameConfig implements Serializable {
 	public GameConfig() {
 		this(4, 1000, 3000, 3000);
 	}
+	
 	public GameConfig(int colorsToShow, int minDisplayTime, int maxDisplayTime, int maxUserResponseTime) {
-		this.colorsToShow = colorsToShow;
-		this.minDisplayTime = minDisplayTime;
-		this.maxDisplayTime = maxDisplayTime;
-		this.maxUserResponseTime = maxUserResponseTime;
+		this.colorsToShow = colorsToShow;	// Número de colores a mostrar (wedges) pueden ser 4, 5 o 6
+		this.minDisplayTime = minDisplayTime;	// Tiempo mínimo de visualización de un color
+		this.maxDisplayTime = maxDisplayTime;	// Tiempo máximo de visualización de un color
+		this.maxUserResponseTime = maxUserResponseTime;	// Tiempo máximo de respuesta del usuario
 	}
 
 	public int getColorsToShow() {
