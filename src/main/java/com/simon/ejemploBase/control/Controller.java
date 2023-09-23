@@ -5,10 +5,13 @@ import com.simon.ejemploBase.model.Model;
 import com.simon.ejemploBase.model.ModelView;
 import com.simon.ejemploBase.view.ApplicationWindow;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import javax.swing.Timer;
 
 public class Controller {
 	private Queue<Integer> sequence;    // Secuencia de colores
@@ -68,24 +71,28 @@ public class Controller {
 
 		int nextColor = sequence.poll();
 
+		view.highlightSpecificColor(selectedColor);	// resalta y reproduce el sonido del color seleccionado
+
 		if (selectedColor != nextColor) {
 			System.out.println("Color incorrecto.");
 			gameIsOver();
 			return;
 		}
 
-		String soundFilePath = String.format("src/main/resources/sounds/%d.wav", selectedColor);
-		view.playSound(soundFilePath);
-		view.highlightSpecificColor(selectedColor);
-
 		if (sequence.isEmpty()) {
 			System.out.println("Ronda completada.");
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
-			playNextColorInSequence();
+			// Se crea un temporizador para que el usuario pueda ver el último color de la secuencia
+			// antes de que se empiece la siguiente ronda
+			Timer timer = new Timer(1000, new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// Este código se ejecutará después de la pausa de 1 segundo
+					playNextColorInSequence();
+				}
+			});
+			// Inicia el temporizador
+			timer.setRepeats(false); // Esto asegura que el temporizador solo se ejecute una vez
+			timer.start();
 		} else {
 			System.out.println("Color correcto.");
 		}
