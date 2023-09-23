@@ -13,6 +13,7 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.File;
+import java.util.LinkedList;
 import java.util.Queue;
 
 public class ApplicationWindow extends JFrame implements PropertyChangeListener {
@@ -254,6 +255,12 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 		};
 
 		worker.execute();
+	}
+
+	public void highlightSpecificColor(int colorIndex) {
+		Queue<Integer> sequence = new LinkedList<>();
+		sequence.add(colorIndex);
+		highlighSequence(sequence, 500);
 	}
 
 	private void setupMenus() {
