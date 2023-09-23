@@ -3,46 +3,127 @@ package com.simon.ejemploBase.control;
 import com.simon.ejemploBase.configuration.Configuration;
 import com.simon.ejemploBase.model.Model;
 import com.simon.ejemploBase.model.ModelView;
+import com.simon.ejemploBase.view.ApplicationWindow;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import javax.swing.Timer;
 
-/**
- * -------------------------------------------------------------------
- *
- * (c) 2021-2022
- *
- * @author Georges Alfaro S.
- * @version 2.1.0 2021-09-13
- *
- * --------------------------------------------------------------------
- */
 public class Controller {
-	//<editor-fold desc="constructors">
-
-	public Controller(Configuration configuration, Model data) {
-		System.out.println("Iniciando gestor de la aplicación..");
-		this.configuration = configuration;
-		this.data = data;
-	}
+	private Queue<Integer> sequence;    // Secuencia de colores
+	private Configuration configuration;
+	private Model data;
+	private ApplicationWindow view;
 
 	public Controller(Configuration configuration) {
+		this(configuration, new Model(6));
+	}
 
-		// Si la aplicación no obtiene una referencia del modelo
-		// externamente (como un recurso de conexión a una base
-		// de data, por ejemplo), la clase de control crea la
-		// instancia directamente.
-		//
-		this(configuration, new Model());
+	public Controller(Configuration configuration, Model data) {
+		this.configuration = configuration;
+		this.data = data;
+		this.view = view;
+		System.out.println("Iniciando gestor de la aplicación..");
+	}
+	public Controller(Configuration configuration, ApplicationWindow view, Model model) {
+		this(configuration, model);
+		this.view = view;
 	}
 
 	public void init() {
+		// Inicialización de la aplicación
 	}
 
-	//</editor-fold>
-	//<editor-fold desc="MVC">
+	public void startGame() {
+		System.out.println("Iniciando nuevo juego..");
+		data.startNewGame();
+		playNextColorInSequence();
+	}
+
+	public void handleColorSelection(int selectedColor) {
+		/**
+		 * Se comprueba que el color seleccionado esté dentro del rango de colores ya que
+		 * si se hace click en cualquier otra parte de la ventana, se envía un -1 como
+		 * color seleccionado. Y esto no contaria como error.
+		 **/
+		if (selectedColor < 0 || selectedColor > data.getNumOfColors()) {
+			System.out.println("Color inválido.");
+			return;
+		}
+
+		if (data.isGameOver()) {
+			System.out.println("Juego terminado.");
+			return;
+		}
+
+		System.out.printf("Color seleccionado: %d%n", selectedColor);
+		System.out.println("Secuencia actual: " + sequence);
+
+		int nextColor = sequence.poll();
+
+		view.highlightSpecificColor(selectedColor);	// resalta y reproduce el sonido del color seleccionado
+
+		if (selectedColor != nextColor) {
+			System.out.println("Color incorrecto.");
+			gameIsOver();
+			return;
+		}
+
+		if (sequence.isEmpty()) {
+			System.out.println("Ronda completada.");
+			// Se crea un temporizador para que el usuario pueda ver el último color de la secuencia
+			// antes de que se empiece la siguiente ronda
+			Timer timer = new Timer(1000, new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// Este código se ejecutará después de la pausa de 1 segundo
+					playNextColorInSequence();
+				}
+			});
+			// Inicia el temporizador
+			timer.setRepeats(false); // Esto asegura que el temporizador solo se ejecute una vez
+			timer.start();
+		} else {
+			System.out.println("Color correcto.");
+		}
+	}
+
+	private void gameIsOver() {
+		System.out.println("Juego terminado.");
+		System.out.println("Color incorrecto.");
+		data.setGameOver(true);
+		data.saveScore();
+		view.playSound("src/main/resources/sounds/error_sound.wav");
+		view.showMessage("Ha terminado el juego. Su puntaje es: " + data.getCurrentRound());
+	}
+
+	public List<Integer> getScores() {
+		return data.getScores();
+	}
+
+	private void playNextColorInSequence() {
+		Queue<Integer> sequenceCopy = new LinkedList<>(data.getNextSequence());
+		if (sequenceCopy == null || sequenceCopy.isEmpty()) {
+			System.out.println("La secuencia está vacía..");
+			return;
+		}
+		this.sequence = sequenceCopy;
+
+		// Calcular el tiempo entre colores
+		int currentRound = data.getCurrentRound();
+		int initialTimeBetweenColors = 1000;
+		int reductionPerRound = 200;
+		int timeBetweenColors = initialTimeBetweenColors - ((currentRound - 1) / 3) * reductionPerRound;
+		timeBetweenColors = Math.max(timeBetweenColors, reductionPerRound); // Asegurar que no sea menor que reductionPerRound
+		System.out.printf("Tiempo entre colores: %d%n", timeBetweenColors);
+		view.highlighSequence(sequenceCopy, timeBetweenColors);
+	}
+
 	public void register(PropertyChangeListener newObserver) {
-		// Asocia el modelo a la clase de control, para poder
-		// ejecutar los métodos correspondientes.
-		//
 		System.out.printf("Registrando: %s..%n", newObserver);
 		getData().addPropertyChangeListener(newObserver);
 	}
@@ -52,16 +133,9 @@ public class Controller {
 		getData().removePropertyChangeListener(current);
 	}
 
-	//</editor-fold>
-	//<editor-fold desc="methods (functionality)">
 	public ModelView getModel() {
-		// El método regresa una referencia al modelo pero con
-		// el tipo de la clase ModelView (ModelView) para limitar
-		// los métodos a los que tendrá acceso la vista.
 		return getData();
 	}
-	//</editor-fold>
-	//<editor-fold desc="métodos (control de la interfaz)">
 
 	public void closeApplication() {
 		if (getConfiguration().isUpdated()) {
@@ -69,16 +143,8 @@ public class Controller {
 		}
 
 		System.out.println("Aplicación finalizada normalmente..");
-
-		// Al cerrar la aplicación, todas las ventanas que son atendidas
-		// por el EDT (Event dispatching thread) principal, son cerradas
-		// también. No es necesario tener una referencia para cerrarlas
-		// de manera explícita.
-		//
 		System.exit(0);
 	}
-	//</editor-fold>
-	//<editor-fold desc="attributes">
 
 	public Configuration getConfiguration() {
 		return configuration;
@@ -88,8 +154,10 @@ public class Controller {
 		return data;
 	}
 
-	private Configuration configuration;
-	private Model data;
-	//</editor-fold>
+	public void addView(ApplicationWindow app) {
+		this.view = app;
+		if (app != null) {
+			app.init();
+		}
+	}
 }
-
