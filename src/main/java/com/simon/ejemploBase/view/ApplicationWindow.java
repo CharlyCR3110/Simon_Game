@@ -260,7 +260,7 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 	public void highlightSpecificColor(int colorIndex) {
 		Queue<Integer> sequence = new LinkedList<>();
 		sequence.add(colorIndex);
-		highlighSequence(sequence, 500);
+		highlighSequence(sequence, 300);
 	}
 
 	private void setupMenus() {
