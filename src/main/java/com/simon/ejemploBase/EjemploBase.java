@@ -8,7 +8,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Queue;
 
 /**
  *
@@ -46,16 +45,6 @@ public class EjemploBase {
 
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         JFrame.setDefaultLookAndFeelDecorated(true);
-
-        // 2021-08-06
-        // Para la versión 14+ del JDK, no es necesario redefinir los iconos
-        // por defecto de la interfaz, ya que no hay problema de despliegue
-        // en dispositivos de alta resolución.
-        //
-        // setIcon("OptionPane.errorIcon", "view/icons/error.png");
-        // setIcon("OptionPane.informationIcon", "view/icons/information.png");
-        // setIcon("OptionPane.questionIcon", "view/icons/question.png");
-        // setIcon("OptionPane.warningIcon", "view/icons/warning.png");
     }
 
     private static void setIcon(String iconName, String iconFile) throws IOException {

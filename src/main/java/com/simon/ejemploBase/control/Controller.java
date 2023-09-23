@@ -20,12 +20,6 @@ public class Controller {
 	private ApplicationWindow view;
 
 	public Controller(Configuration configuration) {
-
-		// Si la aplicación no obtiene una referencia del modelo
-		// externamente (como un recurso de conexión a una base
-		// de data, por ejemplo), la clase de control crea la
-		// instancia directamente.
-		//
 		this(configuration, new Model(6));
 	}
 
