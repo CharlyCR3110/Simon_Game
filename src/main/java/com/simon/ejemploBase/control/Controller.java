@@ -27,20 +27,6 @@ public class Controller {
 		this.gameConfig = gameConfig;
 		System.out.println("Iniciando gestor de la aplicación..");
 	}
-//	public Controller(Configuration configuration) {
-//		this(configuration, new Model(6));
-//	}
-//
-//	public Controller(Configuration configuration, Model data) {
-//		this.configuration = configuration;
-//		this.data = data;
-//		this.view = view;
-//		System.out.println("Iniciando gestor de la aplicación..");
-//	}
-//	public Controller(Configuration configuration, ApplicationWindow view, Model model) {
-//		this(configuration, model);
-//		this.view = view;
-//	}
 	public void init() {
 		// Inicialización de la aplicación
 	}
