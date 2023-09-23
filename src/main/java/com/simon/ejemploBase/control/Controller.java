@@ -108,10 +108,10 @@ public class Controller {
 
 		// Calcular el tiempo entre colores
 		int currentRound = data.getCurrentRound();
-		int initialTimeBetweenColors = 1000;
+		int initialTimeBetweenColors = gameConfig.getMaxDisplayTime();	// Tiempo inicial entre colores
 		int reductionPerRound = 200;
 		int timeBetweenColors = initialTimeBetweenColors - ((currentRound - 1) / 3) * reductionPerRound;
-		timeBetweenColors = Math.max(timeBetweenColors, reductionPerRound); // Asegurar que no sea menor que reductionPerRound
+		timeBetweenColors = Math.max(timeBetweenColors, gameConfig.getMinDisplayTime()); // Asegurar que no sea menor que el tiempo mínimo
 		System.out.printf("Tiempo entre colores: %d%n", timeBetweenColors);
 		view.highlighSequence(sequenceCopy, timeBetweenColors);
 	}
