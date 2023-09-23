@@ -10,43 +10,42 @@ import java.util.Random;
 public class Model extends ObservableModel implements ModelView {
 	private Queue<Integer> sequence;    // Secuencia de colores
 	private int currentRound; // Número de ronda actual
-	private int maxColors; // Número máximo de colores
+	private int numOfColors; // Número de colores (wedges) en el juego
 	private boolean gameOver; // Indica si el juego ha terminado
 	private List<Integer> scores; // Lista de puntajes
+	private Random random; // Generador de números aleatorios
 
 	public Model() {
-		System.out.println("Inicializando modelo..");
+		// Inicialización básica del modelo
+		initModel(4); // Valor predeterminado de colores
 	}
 
 	public Model(int maxColors) {
-		this.maxColors = maxColors; // Corregir el nombre del parámetro aquí
+		initModel(maxColors);
+	}
+
+	private void initModel(int maxColors) {
+		this.numOfColors = maxColors;
 		this.sequence = new LinkedList<>();
 		this.currentRound = 0;
 		this.gameOver = false;
+		this.random = new Random();
 	}
 
 	public void startNewGame() {
-		if (this.sequence == null) {
-			this.sequence = new LinkedList<>();
-		}
-		this.sequence.clear();
-		this.currentRound = 0;
-		this.gameOver = false;
+		sequence.clear();
+		currentRound = 0;
+		gameOver = false;
 		generateNextColor();
 		updateData("startNewGame");
-		System.out.println("SYSO startNewGame");
-	}
-
-	public void generateNextColor() {
-		Random random = new Random();
-		int nextColor = random.nextInt(maxColors);
-		sequence.add(nextColor);
+		// Aquí puedes usar tu biblioteca de registro en lugar de System.out.println()
 	}
 
 	public Queue<Integer> getNextSequence() {
 		nextRound();
 		return sequence;
 	}
+
 	public Queue<Integer> getSequence() {
 		return sequence;
 	}
@@ -55,8 +54,8 @@ public class Model extends ObservableModel implements ModelView {
 		return currentRound;
 	}
 
-	public int getMaxColors() {
-		return maxColors;
+	public int getNumOfColors() {
+		return numOfColors;
 	}
 
 	public boolean isGameOver() {
@@ -64,16 +63,7 @@ public class Model extends ObservableModel implements ModelView {
 	}
 
 	private void updateData(String msg) {
-		// El uso de un PropertyChangeListener permite enviar
-		// eventos desde el modelo asociados a atributos o
-		// métodos específicos.
-		// El primer parámetro del método indica cuál es el
-		// nombre del atributo que es modificado, junto con el
-		// valor original (nulo en este caso) y el valor actual
-		// de dicho atributo. Aquí se utiliza el mensaje para
-		// notificar cuál es el método que hace la actualización.
-		//
-		notifyListeners(String.format("%s", msg), this);
+		notifyListeners(msg, this);
 	}
 
 	public void setGameOver(boolean gameOver) {
@@ -94,6 +84,14 @@ public class Model extends ObservableModel implements ModelView {
 	}
 
 	public List<Integer> getScores() {
+		if (scores == null) {
+			scores = new LinkedList<>();
+		}
 		return scores;
+	}
+
+	private void generateNextColor() {
+		int nextColor = random.nextInt(numOfColors);
+		sequence.add(nextColor);
 	}
 }
