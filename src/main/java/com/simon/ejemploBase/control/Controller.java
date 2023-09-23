@@ -56,23 +56,20 @@ public class Controller {
 		System.out.println("Secuencia actual: " + sequence);
 
 		// Obtener el siguiente color en la secuencia
-		int nextColor = sequence.remove();
+		int nextColor = sequence.poll(); // Usamos poll() para obtener y eliminar el primer elemento
 
 		// Reproducir el sonido correspondiente al color seleccionado
+		if (selectedColor != nextColor) {
+			System.out.println("Color incorrecto.");
+			gameIsOver();
+			return;
+		}
+
 		String soundFilePath = String.format("src/main/resources/sounds/%d.wav", selectedColor);
 		view.playSound(soundFilePath);
 
 		// Comprobar si la secuencia todavía tiene elementos
-		if (!sequence.isEmpty()) {
-			System.out.println("Color siguiente: " + nextColor);
-			// Comprobar si el color seleccionado coincide con el siguiente color en la secuencia
-			if (nextColor != selectedColor) {
-				gameIsOver(); // Llama a la función para terminar el juego
-				return;
-			}
-			// El color seleccionado es correcto
-			System.out.println("Color correcto.");
-		} else {
+		if (sequence.isEmpty()) {
 			// El jugador ha completado la ronda
 			System.out.println("Ronda completada.");
 			// Esperar un segundo antes de pasar a la siguiente ronda
@@ -82,8 +79,12 @@ public class Controller {
 				e.printStackTrace();
 			}
 			playNextColorInSequence(); // Llama a la función para continuar con la siguiente secuencia
+		} else {
+			// El color seleccionado es correcto
+			System.out.println("Color correcto.");
 		}
 	}
+
 
 	private void gameIsOver() {
 		// DEBUG
