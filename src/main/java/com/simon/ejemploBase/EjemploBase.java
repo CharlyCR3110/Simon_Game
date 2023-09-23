@@ -1,20 +1,18 @@
 package com.simon.ejemploBase;
 
 import com.simon.ejemploBase.configuration.Configuration;
+import com.simon.ejemploBase.configuration.GameConfig;
 import com.simon.ejemploBase.control.Controller;
 import com.simon.ejemploBase.view.ApplicationWindow;
+import com.simon.xml.XmlPersister;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- *
- * @author Georges Alfaro S.
- * @version 1.0.0 2023-09-05
- */
 public class EjemploBase {
+    private final Configuration configuration;
 
     public EjemploBase() {
         this.configuration = Configuration.getInstance();
@@ -60,13 +58,17 @@ public class EjemploBase {
     }
 
     public void createAndShowGUI() {
-        Controller control = new Controller(configuration);
+        GameConfig gameConfig = null;
+        try {
+            gameConfig = XmlPersister.instance().load();
+        } catch (Exception e) {
+            gameConfig = new GameConfig();  // en caso de que no se pueda cargar el archivo de configuración se crea uno nuevo
+        }
+        Controller control = new Controller(configuration, gameConfig);
         control.init();
 
         ApplicationWindow app = new ApplicationWindow(getClass().getSimpleName(), control);
 
         control.addView(app);
     }
-
-    private final Configuration configuration;
 }
