@@ -124,64 +124,53 @@ public class Controller {
 
 	private void playNextColorInSequence() {
 		Queue<Integer> sequenceCopy = new LinkedList<>(data.getNextSequence());
+
 		if (sequenceCopy == null || sequenceCopy.isEmpty()) {
 			System.out.println("La secuencia está vacía..");
 			return;
 		}
-		this.sequence = sequenceCopy;
 
-		// Calcular el tiempo entre colores
+		this.sequence = sequenceCopy;
 		int currentRound = data.getCurrentRound();
-		int initialTimeBetweenColors = gameConfig.getMaxDisplayTime();	// Tiempo inicial entre colores
-		int reductionPerRound = 200;
-		int timeBetweenColors = initialTimeBetweenColors - ((currentRound - 1) / 3) * reductionPerRound;
-		timeBetweenColors = Math.max(timeBetweenColors, gameConfig.getMinDisplayTime()); // Asegurar que no sea menor que el tiempo mínimo
+		int timeBetweenColors = calculateTimeBetweenColors(currentRound);
 		System.out.printf("Tiempo entre colores: %d%n", timeBetweenColors);
 		view.highlighSequence(sequenceCopy, timeBetweenColors);
 
-		// Para evitar que el tiempo corra mientras se muestra la secuencia se hace lo siguiente
-		Timer timer = new Timer(timeBetweenColors * sequenceCopy.size(), new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// Este código se ejecutará después de la pausa de 1 segundo
-				startUserResponseTimer();
-			}
-		});
-		// Inicia el temporizador
-		timer.setRepeats(false); // Esto asegura que el temporizador solo se ejecute una vez
-		timer.start();
+		startSequenceDisplayTimer(sequenceCopy.size(), timeBetweenColors);
+		startUserResponseTimer(gameConfig.getMaxUserResponseTime());
+	}
 
-		// Iniciar el temporizador para que el usuario pueda clickear los colores de la secuencia
-		int maxUserResponseTime = gameConfig.getMaxUserResponseTime();
-		userMoveTimer = new Timer(maxUserResponseTime, new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// cuando el temporizador se acabe, se ejecutará este código
-				handleUserResponseTimeout();
-			}
-		});
-		userMoveTimer.setRepeats(false); // Esto asegura que el temporizador solo se ejecute una vez
+	private int calculateTimeBetweenColors(int currentRound) {
+		int initialTimeBetweenColors = gameConfig.getMaxDisplayTime();
+		int reductionPerRound = 200;
+		int timeBetweenColors = initialTimeBetweenColors - ((currentRound - 1) / 3) * reductionPerRound;
+		return Math.max(timeBetweenColors, gameConfig.getMinDisplayTime());
+	}
+
+	private void startSequenceDisplayTimer(int sequenceSize, int timeBetweenColors) {
+		Timer sequenceDisplayTimer = new Timer(timeBetweenColors * sequenceSize, e -> startUserResponseTimer(gameConfig.getMaxUserResponseTime()));
+		sequenceDisplayTimer.setRepeats(false);
+		sequenceDisplayTimer.start();
+	}
+
+	private void startUserResponseTimer(int maxUserResponseTime) {
+		if (userMoveTimer != null && userMoveTimer.isRunning()) {
+			userMoveTimer.stop();
+		}
+
+		userMoveTimer = new Timer(maxUserResponseTime, e -> handleUserResponseTimeout());
+		userMoveTimer.setRepeats(false);
 		userMoveTimer.start();
 	}
 
 	private void handleUserResponseTimeout() {
-		// se detiene el temporizador (en caso de que no se haya detenido ya)
 		if (userMoveTimer != null && userMoveTimer.isRunning()) {
 			userMoveTimer.stop();
 		}
 
-		// gg's
 		gameIsOver("Se acabó el tiempo de respuesta.");
 	}
 
-	private void startUserResponseTimer() {
-		// Se crea un temporizador para que el usuario pueda ver el último color de la secuencia
-		if (userMoveTimer != null && userMoveTimer.isRunning()) {
-			userMoveTimer.stop();
-		}
-
-		userMoveTimer.start();
-	}
 
 	public void register(PropertyChangeListener newObserver) {
 		System.out.printf("Registrando: %s..%n", newObserver);
