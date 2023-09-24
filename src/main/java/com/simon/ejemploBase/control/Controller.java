@@ -93,23 +93,15 @@ public class Controller {
 	}
 
 	private String nameOfSelectedColor(int selectedColorIndex) {
-		switch (selectedColorIndex) {
-			case 0:
-				return "Rojo";
-			case 1:
-				return "Verde";
-			case 2:
-				return "Azul";
-			case 3:
-				return "Amarillo";
-			case 4:
-				return "Cyan";
-			case 5:
-				return "Magenta";
-			default:
-				return "Color desconocido";
+		String[] colorNames = {"Rojo", "Verde", "Azul", "Amarillo", "Cyan", "Magenta"};
+
+		if (selectedColorIndex >= 0 && selectedColorIndex < colorNames.length) {
+			return colorNames[selectedColorIndex];
+		} else {
+			return "Color desconocido";
 		}
 	}
+
 
 	private void gameIsOver(String motivo) {
 		System.out.println("Juego terminado.");
