@@ -290,10 +290,10 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 		gameMenu.getItem(0).addActionListener(e -> restartGame());
 
 		// Agregar un ActionListener para el elemento "Puntajes"
-		gameMenu.getItem(1).addActionListener(e -> showScores());
+		gameMenu.getItem(1).addActionListener(e -> displayScores());
 	}
 
-	private void showScores() {
+	private void displayScores() {
 		// crea la ventana de puntajes ScoresView
 		ScoresView scoresView = new ScoresView(mainControl.getScoresSorterMaxToMin());
 	}
