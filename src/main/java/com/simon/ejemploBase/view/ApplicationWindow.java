@@ -295,7 +295,7 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 
 	private void showScores() {
 		// crea la ventana de puntajes ScoresView
-		ScoresView scoresView = new ScoresView(mainControl.getScores());
+		ScoresView scoresView = new ScoresView(mainControl.getScoresSorterMaxToMin());
 	}
 
 	// Método para reiniciar el juego
