@@ -104,23 +104,19 @@ public class Controller {
 
 
 	private void gameIsOver(String motivo) {
-		System.out.println("Juego terminado.");
-		System.out.println("Color incorrecto.");
 		data.setGameOver(true);
 		data.saveScore();
+
 		view.playSound("src/main/resources/sounds/error_sound.wav");
 
-		StringBuilder sb = new StringBuilder();
-		sb.append("¡Oh no! Parece que has perdido.");
-		sb.append(System.lineSeparator());
-		sb.append("Motivo:").append(motivo);
-		sb.append(System.lineSeparator());
-		sb.append("Tu puntuación final es de: ");
-		sb.append(data.getCurrentRound());
-		sb.append(". ¡Anímate y vuelve a intentarlo!");
+		String message = String.format(
+				"¡Oh no! Parece que has perdido.%nMotivo: %s%nTu puntuación final es de: %d. ¡Anímate y vuelve a intentarlo!",
+				motivo, data.getCurrentRound()
+		);
 
-		view.showMessage(sb.toString());
+		view.showMessage(message);
 	}
+
 
 	public List<Integer> getScores() {
 		return data.getScores();
