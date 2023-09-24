@@ -122,6 +122,10 @@ public class Controller {
 		return data.getScores();
 	}
 
+	public List<Integer> getScoresSorterMaxToMin() {
+		return data.getScoresSorterMaxToMin();
+	}
+
 	private void playNextColorInSequence() {
 		Queue<Integer> sequenceCopy = new LinkedList<>(data.getNextSequence());
 

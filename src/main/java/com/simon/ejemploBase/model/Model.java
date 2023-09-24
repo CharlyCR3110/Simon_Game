@@ -94,4 +94,13 @@ public class Model extends ObservableModel implements ModelView {
 		int nextColor = random.nextInt(numOfColors);
 		sequence.add(nextColor);
 	}
+
+	public List<Integer> getScoresSorterMaxToMin() {
+		if (scores == null) {
+			scores = new LinkedList<>();
+		}
+		List<Integer> scoresCopy = new LinkedList<>(scores);
+		scoresCopy.sort((o1, o2) -> o2 - o1);	// Ordenar de mayor a menor
+		return scoresCopy;
+	}
 }
