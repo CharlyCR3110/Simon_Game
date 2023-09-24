@@ -20,6 +20,7 @@ public class Controller {
 	private Model data;
 	private ApplicationWindow view;
 	private GameConfig gameConfig;
+	private Timer userMoveTimer;
 
 	public Controller(Configuration configuration, GameConfig gameConfig) {
 		this.configuration = configuration;
@@ -33,11 +34,17 @@ public class Controller {
 
 	public void startGame() {
 		System.out.println("Iniciando nuevo juego..");
+		userMoveTimer = null;
 		data.startNewGame();
 		playNextColorInSequence();
 	}
 
 	public void handleColorSelection(int selectedColor) {
+		// se reinicia el temporizador de respuesta del usuario
+		if (userMoveTimer != null && userMoveTimer.isRunning()) {
+			userMoveTimer.stop();
+		}
+
 		/**
 		 * Se comprueba que el color seleccionado esté dentro del rango de colores ya que
 		 * si se hace click en cualquier otra parte de la ventana, se envía un -1 como
@@ -62,7 +69,7 @@ public class Controller {
 
 		if (selectedColor != nextColor) {
 			System.out.println("Color incorrecto.");
-			gameIsOver();
+			gameIsOver("Seleccionaste un color incorrecto, el cual debio ser: " + nameOfSelectedColor(nextColor));
 			return;
 		}
 
@@ -85,13 +92,42 @@ public class Controller {
 		}
 	}
 
-	private void gameIsOver() {
+	private String nameOfSelectedColor(int selectedColorIndex) {
+		switch (selectedColorIndex) {
+			case 0:
+				return "Rojo";
+			case 1:
+				return "Verde";
+			case 2:
+				return "Azul";
+			case 3:
+				return "Amarillo";
+			case 4:
+				return "Cyan";
+			case 5:
+				return "Magenta";
+			default:
+				return "Color desconocido";
+		}
+	}
+
+	private void gameIsOver(String motivo) {
 		System.out.println("Juego terminado.");
 		System.out.println("Color incorrecto.");
 		data.setGameOver(true);
 		data.saveScore();
 		view.playSound("src/main/resources/sounds/error_sound.wav");
-		view.showMessage("Ha terminado el juego. Su puntaje es: " + data.getCurrentRound());
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("¡Oh no! Parece que has perdido.");
+		sb.append(System.lineSeparator());
+		sb.append("Motivo:").append(motivo);
+		sb.append(System.lineSeparator());
+		sb.append("Tu puntuación final es de: ");
+		sb.append(data.getCurrentRound());
+		sb.append(". ¡Anímate y vuelve a intentarlo!");
+
+		view.showMessage(sb.toString());
 	}
 
 	public List<Integer> getScores() {
@@ -114,6 +150,49 @@ public class Controller {
 		timeBetweenColors = Math.max(timeBetweenColors, gameConfig.getMinDisplayTime()); // Asegurar que no sea menor que el tiempo mínimo
 		System.out.printf("Tiempo entre colores: %d%n", timeBetweenColors);
 		view.highlighSequence(sequenceCopy, timeBetweenColors);
+
+		// Para evitar que el tiempo corra mientras se muestra la secuencia se hace lo siguiente
+		Timer timer = new Timer(timeBetweenColors * sequenceCopy.size(), new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Este código se ejecutará después de la pausa de 1 segundo
+				startUserResponseTimer();
+			}
+		});
+		// Inicia el temporizador
+		timer.setRepeats(false); // Esto asegura que el temporizador solo se ejecute una vez
+		timer.start();
+
+		// Iniciar el temporizador para que el usuario pueda clickear los colores de la secuencia
+		int maxUserResponseTime = gameConfig.getMaxUserResponseTime();
+		userMoveTimer = new Timer(maxUserResponseTime, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// cuando el temporizador se acabe, se ejecutará este código
+				handleUserResponseTimeout();
+			}
+		});
+		userMoveTimer.setRepeats(false); // Esto asegura que el temporizador solo se ejecute una vez
+		userMoveTimer.start();
+	}
+
+	private void handleUserResponseTimeout() {
+		// se detiene el temporizador (en caso de que no se haya detenido ya)
+		if (userMoveTimer != null && userMoveTimer.isRunning()) {
+			userMoveTimer.stop();
+		}
+
+		// gg's
+		gameIsOver("Se acabó el tiempo de respuesta.");
+	}
+
+	private void startUserResponseTimer() {
+		// Se crea un temporizador para que el usuario pueda ver el último color de la secuencia
+		if (userMoveTimer != null && userMoveTimer.isRunning()) {
+			userMoveTimer.stop();
+		}
+
+		userMoveTimer.start();
 	}
 
 	public void register(PropertyChangeListener newObserver) {
