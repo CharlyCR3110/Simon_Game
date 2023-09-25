@@ -1,6 +1,6 @@
 package com.simon.xml;
 
-import com.simon.ejemploBase.configuration.GameConfig;
+import com.simon.game.configuration.GameConfig;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;

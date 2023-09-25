@@ -1,8 +1,8 @@
-package com.simon.ejemploBase.view;
+package com.simon.game.view;
 
-import com.simon.ejemploBase.configuration.Configuration;
-import com.simon.ejemploBase.control.Controller;
-import com.simon.ejemploBase.model.ModelView;
+import com.simon.game.configuration.Configuration;
+import com.simon.game.control.Controller;
+import com.simon.game.model.ModelView;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;

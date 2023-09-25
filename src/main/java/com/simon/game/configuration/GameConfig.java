@@ -1,4 +1,4 @@
-package com.simon.ejemploBase.configuration;
+package com.simon.game.configuration;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;

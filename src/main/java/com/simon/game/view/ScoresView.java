@@ -1,8 +1,7 @@
-package com.simon.ejemploBase.view;
+package com.simon.game.view;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.util.List;
 
 public class ScoresView {

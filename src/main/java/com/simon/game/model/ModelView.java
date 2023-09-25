@@ -1,4 +1,4 @@
-package com.simon.ejemploBase.model;
+package com.simon.game.model;
 
 public interface ModelView {
 

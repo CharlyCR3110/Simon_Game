@@ -1,10 +1,10 @@
-package com.simon.ejemploBase.control;
+package com.simon.game.control;
 
-import com.simon.ejemploBase.configuration.Configuration;
-import com.simon.ejemploBase.configuration.GameConfig;
-import com.simon.ejemploBase.model.Model;
-import com.simon.ejemploBase.model.ModelView;
-import com.simon.ejemploBase.view.ApplicationWindow;
+import com.simon.game.configuration.Configuration;
+import com.simon.game.configuration.GameConfig;
+import com.simon.game.model.Model;
+import com.simon.game.model.ModelView;
+import com.simon.game.view.ApplicationWindow;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

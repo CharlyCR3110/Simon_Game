@@ -1,4 +1,4 @@
-package com.simon.ejemploBase.view;
+package com.simon.game.view;
 
 import java.awt.Color;
 import java.awt.FlowLayout;

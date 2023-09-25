@@ -1,9 +1,9 @@
-package com.simon.ejemploBase;
+package com.simon.game;
 
-import com.simon.ejemploBase.configuration.Configuration;
-import com.simon.ejemploBase.configuration.GameConfig;
-import com.simon.ejemploBase.control.Controller;
-import com.simon.ejemploBase.view.ApplicationWindow;
+import com.simon.game.configuration.Configuration;
+import com.simon.game.configuration.GameConfig;
+import com.simon.game.control.Controller;
+import com.simon.game.view.ApplicationWindow;
 import com.simon.xml.XmlPersister;
 
 import javax.imageio.ImageIO;
@@ -11,10 +11,10 @@ import javax.swing.*;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class EjemploBase {
+public class SimonGame {
     private final Configuration configuration;
 
-    public EjemploBase() {
+    public SimonGame() {
         this.configuration = Configuration.getInstance();
     }
 
@@ -29,7 +29,7 @@ public class EjemploBase {
                 | UnsupportedLookAndFeelException ex) {
             System.err.printf("Excepción: '%s'%n", ex.getMessage());
         }
-        new EjemploBase().init();
+        new SimonGame().init();
     }
 
     private static void setupGUI() throws
@@ -46,7 +46,7 @@ public class EjemploBase {
     }
 
     private static void setIcon(String iconName, String iconFile) throws IOException {
-        InputStream in = EjemploBase.class.getResourceAsStream(iconFile);
+        InputStream in = SimonGame.class.getResourceAsStream(iconFile);
         ImageIcon icon = new ImageIcon(ImageIO.read(in));
         UIManager.put(iconName, icon);
     }

@@ -1,4 +1,4 @@
-package com.simon.ejemploBase.configuration;
+package com.simon.game.configuration;
 
 import com.simon.util.PathUtils;
 import java.io.FileInputStream;
@@ -21,7 +21,7 @@ public class Configuration extends Properties {
 			instance = new Configuration();
 			try {
 				System.out.println("Cargando configuración por defecto..");
-				instance.loadFromXML(Configuration.class.getResourceAsStream("/com/simon/ejemploBase/configuration/config.properties"));
+				instance.loadFromXML(Configuration.class.getResourceAsStream("/com/simon/game/configuration/config.properties"));
 
 				configurationPath = PathUtils.getUserPath(instance.getProperty("configuration_file"));
 				System.out.printf("Cargando configuración del usuario: '%s'..%n", configurationPath);
@@ -61,7 +61,7 @@ public class Configuration extends Properties {
 		this.updated = updated;
 	}
 
-	private static final String CONFIGURATION_FILE = "com/simon/ejemploBase/configuration/config.properties";
+	private static final String CONFIGURATION_FILE = "com/simon/game/configuration/config.properties";
 	private static Configuration instance = null;
 	private static String configurationPath = null;
 	private boolean updated;
