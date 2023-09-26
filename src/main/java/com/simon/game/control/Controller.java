@@ -141,7 +141,6 @@ public class Controller {
 		view.highlighSequence(sequenceCopy, timeBetweenColors);
 
 		startSequenceDisplayTimer(sequenceCopy.size(), timeBetweenColors);
-		startUserResponseTimer(gameConfig.getMaxUserResponseTime());
 	}
 
 	private int calculateTimeBetweenColors(int currentRound) {
