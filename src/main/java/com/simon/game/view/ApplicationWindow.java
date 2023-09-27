@@ -130,7 +130,7 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 				int cy = getHeight() / 2;
 				int s = (int) (0.80 * Math.min(getWidth(), getHeight()));
 				int centralCircleRadius = s / 6;
-				g.setColor(Color.DARK_GRAY);
+				g.setColor(Color.BLACK);
 				g.fillOval(cx - centralCircleRadius, cy - centralCircleRadius, centralCircleRadius * 2, centralCircleRadius * 2);
 			}
 
@@ -169,7 +169,7 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 		int y1 = (int) (cy + s * 0.5 * Math.sin(-(start + end) * r));	// Puntos de inicio y fin del sector
 		g.setColor(c);	// Color del sector
 		g.fillArc(cx - s / 2, cy - s / 2, s, s, start, end);	// Dibuja el sector
-		g.setColor(Color.DARK_GRAY);	// Color de las líneas
+		g.setColor(Color.BLACK);	// Color de las líneas
 		g.setStroke(new BasicStroke(16f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL));	// Grosor de las líneas
 		g.drawLine(cx, cy, x0, y0);	// Dibuja las líneas
 		g.drawLine(cx, cy, x1, y1);	// Dibuja las líneas
