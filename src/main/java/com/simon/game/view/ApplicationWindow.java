@@ -141,18 +141,19 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 					int s = (int) (0.80 * Math.min(getWidth(), getHeight()));
 					int n = numSectors;
 
-					int startAngle = (highlightedColorIndex * 360) / n;
-					int sweepAngle = (360 / n);
+					int startAngle = ((highlightedColorIndex * 360) / n) + 5;	// Ángulo de inicio del sector
+					int sweepAngle = (360 / n) - 10;	// Ángulo de barrido del sector
 					Color highlightedColor = COLORS[highlightedColorIndex];
 
-					// Dibuja el color resaltado con un borde especial
-					g.setColor(highlightedColor.darker()); // Cambia el color del borde
-					g.setStroke(new BasicStroke(6f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL)); // Grosor del borde
-					g.drawArc(cx - s / 2, cy - s / 2, s, s, startAngle, sweepAngle);
+					// Aumentar la luminosidad del color
+					float[] hsb = Color.RGBtoHSB(highlightedColor.getRed(), highlightedColor.getGreen(), highlightedColor.getBlue(), null);
+					float newBrightness = Math.min(1.0f, hsb[2] + 0.2f); // Aumentar el brillo en 0.2
+					Color brighterColor = new Color(Color.HSBtoRGB(hsb[0], hsb[1], newBrightness));
 
-					// Dibuja el color resaltado con un fondo especial
-					g.setColor(new Color(255, 255, 255, 128)); // Color de fondo semitransparente
-					g.fillArc(cx - s / 2, cy - s / 2, s, s, startAngle, sweepAngle);
+					// Establecer el color brillante
+					g.setColor(brighterColor);
+					g.setStroke(new BasicStroke(8f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL)); // Grosor del borde
+					g.drawArc(cx - s / 2, cy - s / 2, s, s, startAngle, sweepAngle);	// dibuja el borde del sector
 				}
 			}
 		};
