@@ -76,11 +76,7 @@ public class ApplicationWindow extends JFrame implements PropertyChangeListener 
 				try {
 					Robot robot = new Robot();
 					Color color = robot.getPixelColor(e.getXOnScreen(), e.getYOnScreen());
-					System.out.println("Color: " + color);
-					System.out.println("Índice: " + getSelectedColorIndex(color));
 					mainControl.handleColorSelection(getSelectedColorIndex(color));
-//					highlightedColorIndex = getSelectedColorIndex(color);
-//					mainPanel.repaint();
 				} catch (AWTException ex) {
 					ex.printStackTrace();
 				}
