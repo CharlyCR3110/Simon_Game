@@ -38,7 +38,6 @@ public class Model extends ObservableModel implements ModelView {
 		gameOver = false;
 		generateNextColor();
 		updateData("startNewGame");
-		// Aquí puedes usar tu biblioteca de registro en lugar de System.out.println()
 	}
 
 	public Queue<Integer> getNextSequence() {
