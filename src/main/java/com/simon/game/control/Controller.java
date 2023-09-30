@@ -33,7 +33,6 @@ public class Controller {
 	}
 
 	public void startGame() {
-		System.out.println("Iniciando nuevo juego..");
 		userMoveTimer = null;
 		data.startNewGame();
 		playNextColorInSequence();
@@ -49,21 +48,15 @@ public class Controller {
 		 * color seleccionado. Y esto no contaria como error.
 		 **/
 		if (!isValidColor(selectedColor)) {
-			System.out.println("Color inválido.");
 			return;
 		}
 
 		if (data.isGameOver()) {
-			System.out.println("Juego terminado.");
 			return;
 		}
 
-		System.out.printf("Color seleccionado: %d%n", selectedColor);
-		System.out.println("Secuencia actual: " + sequence);
-
 		// Antes de comprobar si el color seleccionado es correcto, se comprueba si la secuencia está vacía
 		if (sequence.isEmpty()) {
-			System.out.println("La secuencia está vacía..");
 			return;
 		}
 
@@ -72,18 +65,14 @@ public class Controller {
 		view.highlightSpecificColor(selectedColor);	// resalta y reproduce el sonido del color seleccionado
 
 		if (selectedColor != nextColor) {
-			System.out.println("Color incorrecto.");
 			gameIsOver("Seleccionaste un color incorrecto, el cual debio ser: " + nameOfSelectedColor(nextColor));
 			return;
 		}
 
 		// Si la secuencia está vacía, se ha completado la ronda
 		if (sequence.isEmpty()) {
-			System.out.println("Ronda completada.");
 			// Se crea y se inicia un temporizador para la próxima ronda
 			createAndStartTimerForNextRound();
-		} else {
-			System.out.println("Color correcto.");
 		}
 	}
 
@@ -151,14 +140,12 @@ public class Controller {
 		Queue<Integer> sequenceCopy = new LinkedList<>(data.getNextSequence());
 
 		if (sequenceCopy == null || sequenceCopy.isEmpty()) {
-			System.out.println("La secuencia está vacía..");
 			return;
 		}
 
 		this.sequence = sequenceCopy;
 		int currentRound = data.getCurrentRound();
 		int timeBetweenColors = calculateTimeBetweenColors(currentRound);
-		System.out.printf("Tiempo entre colores: %d%n", timeBetweenColors);
 		view.highlighSequence(sequenceCopy, timeBetweenColors);
 
 		startSequenceDisplayTimer(sequenceCopy.size(), timeBetweenColors);
