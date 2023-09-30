@@ -9,10 +9,10 @@ import java.io.Serializable;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name = "gameConfig")
 public class GameConfig implements Serializable {
-	private int colorsToShow;
-	private int minDisplayTime;
-	private int maxDisplayTime;
-	private int maxUserResponseTime;
+	private int colorsToShow;	// Número de colores a mostrar (wedges) pueden ser 4, 5 o 6
+	private int minDisplayTime;	// Tiempo mínimo de visualización de un color
+	private int maxDisplayTime;	// Tiempo máximo de visualización de un color
+	private int maxUserResponseTime;	// Tiempo máximo de respuesta del usuario
 
 	public GameConfig() {
 		this(4, 1000, 3000, 3000);
