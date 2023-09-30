@@ -2,6 +2,7 @@ package com.simon.game.model;
 
 import com.simon.mvc.ObservableModel;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -16,7 +17,6 @@ public class Model extends ObservableModel implements ModelView {
 	private Random random; // Generador de números aleatorios
 
 	public Model() {
-		// Inicialización básica del modelo
 		initModel(4); // Valor predeterminado de colores
 	}
 
@@ -77,29 +77,29 @@ public class Model extends ObservableModel implements ModelView {
 
 	public void saveScore() {
 		if (scores == null) {
-			scores = new LinkedList<>();
+			scores = new ArrayList<>();
 		}
 		scores.add(currentRound);
 	}
 
 	public List<Integer> getScores() {
 		if (scores == null) {
-			scores = new LinkedList<>();
+			scores = new ArrayList<>();
 		}
 		return scores;
+	}
+
+	public List<Integer> getScoresSorterMaxToMin() {
+		if (scores == null) {
+			scores = new ArrayList<>();
+		}
+		List<Integer> scoresCopy = new ArrayList<>(scores);
+		scoresCopy.sort((o1, o2) -> o2 - o1);    // Ordenar de mayor a menor
+		return scoresCopy;
 	}
 
 	private void generateNextColor() {
 		int nextColor = random.nextInt(numOfColors);
 		sequence.add(nextColor);
-	}
-
-	public List<Integer> getScoresSorterMaxToMin() {
-		if (scores == null) {
-			scores = new LinkedList<>();
-		}
-		List<Integer> scoresCopy = new LinkedList<>(scores);
-		scoresCopy.sort((o1, o2) -> o2 - o1);	// Ordenar de mayor a menor
-		return scoresCopy;
 	}
 }
