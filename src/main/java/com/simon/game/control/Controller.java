@@ -63,6 +63,12 @@ public class Controller {
 		System.out.printf("Color seleccionado: %d%n", selectedColor);
 		System.out.println("Secuencia actual: " + sequence);
 
+		// Antes de comprobar si el color seleccionado es correcto, se comprueba si la secuencia está vacía
+		if (sequence.isEmpty()) {
+			System.out.println("La secuencia está vacía..");
+			return;
+		}
+
 		int nextColor = sequence.poll();
 
 		view.highlightSpecificColor(selectedColor);	// resalta y reproduce el sonido del color seleccionado
@@ -73,6 +79,7 @@ public class Controller {
 			return;
 		}
 
+		// Si la secuencia está vacía, se ha completado la ronda
 		if (sequence.isEmpty()) {
 			System.out.println("Ronda completada.");
 			// Se crea un temporizador para que el usuario pueda ver el último color de la secuencia
