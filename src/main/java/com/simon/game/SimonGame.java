@@ -69,6 +69,8 @@ public class SimonGame {
 
         ApplicationWindow app = new ApplicationWindow(getClass().getSimpleName(), control);
 
+        app.setIconImage(new ImageIcon(getClass().getResource("/images/SimonIconPixelArt.png")).getImage());
+
         control.addView(app);
     }
 }
