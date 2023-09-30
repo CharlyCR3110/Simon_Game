@@ -40,17 +40,15 @@ public class Controller {
 	}
 
 	public void handleColorSelection(int selectedColor) {
-		// se reinicia el temporizador de respuesta del usuario
-		if (userMoveTimer != null && userMoveTimer.isRunning()) {
-			userMoveTimer.stop();
-		}
+		// Se detiene el temporizador de respuesta del usuario si está en ejecución
+		stopUserMoveTimer();
 
 		/**
 		 * Se comprueba que el color seleccionado esté dentro del rango de colores ya que
 		 * si se hace click en cualquier otra parte de la ventana, se envía un -1 como
 		 * color seleccionado. Y esto no contaria como error.
 		 **/
-		if (selectedColor < 0 || selectedColor > data.getNumOfColors()) {
+		if (!isValidColor(selectedColor)) {
 			System.out.println("Color inválido.");
 			return;
 		}
@@ -82,21 +80,37 @@ public class Controller {
 		// Si la secuencia está vacía, se ha completado la ronda
 		if (sequence.isEmpty()) {
 			System.out.println("Ronda completada.");
-			// Se crea un temporizador para que el usuario pueda ver el último color de la secuencia
-			// antes de que se empiece la siguiente ronda
-			Timer timer = new Timer(1000, new ActionListener() {
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					// Este código se ejecutará después de la pausa de 1 segundo
-					playNextColorInSequence();
-				}
-			});
-			// Inicia el temporizador
-			timer.setRepeats(false); // Esto asegura que el temporizador solo se ejecute una vez
-			timer.start();
+			// Se crea y se inicia un temporizador para la próxima ronda
+			createAndStartTimerForNextRound();
 		} else {
 			System.out.println("Color correcto.");
 		}
+	}
+
+	// Método para detener el temporizador de respuesta del usuario si está en ejecución
+	private void stopUserMoveTimer() {
+		if (userMoveTimer != null && userMoveTimer.isRunning()) {
+			userMoveTimer.stop();
+		}
+	}
+
+	// Método para verificar si el color seleccionado es válido
+	private boolean isValidColor(int selectedColor) {
+		return selectedColor >= 0 && selectedColor <= data.getNumOfColors();
+	}
+
+	// Método para crear y empezar un temporizador para la próxima ronda
+	private void createAndStartTimerForNextRound() {
+		Timer timer = new Timer(1000, new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// Este código se ejecutará después de la pausa de 1 segundo
+				playNextColorInSequence();
+			}
+		});
+		// Inicia el temporizador
+		timer.setRepeats(false); // Esto asegura que el temporizador solo se ejecute una vez
+		timer.start();
 	}
 
 	private String nameOfSelectedColor(int selectedColorIndex) {
