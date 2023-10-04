@@ -33,6 +33,7 @@ public class Controller {
 	}
 
 	public void startGame() {
+		stopUserMoveTimer();
 		userMoveTimer = null;
 		data.startNewGame();
 		playNextColorInSequence();
