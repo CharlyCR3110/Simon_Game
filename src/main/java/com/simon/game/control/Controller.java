@@ -26,7 +26,6 @@ public class Controller {
 		this.configuration = configuration;
 		this.data = new Model(gameConfig.getColorsToShow());
 		this.gameConfig = gameConfig;
-		System.out.println("Iniciando gestor de la aplicación..");
 	}
 	public void init() {
 		// Inicialización de la aplicación
@@ -185,12 +184,10 @@ public class Controller {
 
 
 	public void register(PropertyChangeListener newObserver) {
-		System.out.printf("Registrando: %s..%n", newObserver);
 		getData().addPropertyChangeListener(newObserver);
 	}
 
 	public void remove(PropertyChangeListener current) {
-		System.out.printf("Suprimiendo: %s..%n", current);
 		getData().removePropertyChangeListener(current);
 	}
 
@@ -203,7 +200,6 @@ public class Controller {
 			getConfiguration().saveConfiguration();
 		}
 
-		System.out.println("Aplicación finalizada normalmente..");
 		System.exit(0);
 	}
 
