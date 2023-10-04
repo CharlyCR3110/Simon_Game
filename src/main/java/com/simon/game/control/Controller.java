@@ -185,7 +185,6 @@ public class Controller {
 
 
 	public void register(PropertyChangeListener newObserver) {
-		System.out.printf("Registrando: %s..%n", newObserver);
 		getData().addPropertyChangeListener(newObserver);
 	}
 
