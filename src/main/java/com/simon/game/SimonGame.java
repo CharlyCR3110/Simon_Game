@@ -43,12 +43,6 @@ public class SimonGame {
         JFrame.setDefaultLookAndFeelDecorated(true);
     }
 
-    private static void setIcon(String iconName, String iconFile) throws IOException {
-        InputStream in = SimonGame.class.getResourceAsStream(iconFile);
-        ImageIcon icon = new ImageIcon(ImageIO.read(in));
-        UIManager.put(iconName, icon);
-    }
-
     public void init() {
         SwingUtilities.invokeLater(() -> {
             createAndShowGUI();
