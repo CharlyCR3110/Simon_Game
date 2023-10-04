@@ -39,8 +39,6 @@ public class SimonGame {
             UnsupportedLookAndFeelException,
             IOException {
 
-        System.out.println("Configurando interfaz..");
-
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         JFrame.setDefaultLookAndFeelDecorated(true);
     }
